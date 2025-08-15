@@ -4,7 +4,7 @@ self.addEventListener("fetch", (event) => {
   const repo = pathname.length > 0 ? `/${pathname[0]}/` : '/';
   if (url.pathname === repo && url.searchParams.has("site")) {
     const site = url.searchParams.get("site");
-    const proxyURL = `https://script.google.com/macros/s/AKfycbw_MYcInMCCYiQZNzeaZAp7Upl_UwNZS2O1rlx1bDBwBT7UFJJPEpvNSSmbkCgWXATk/exec?site=${encodeURIComponent(site)}`;
+    const proxyURL = `https://proxy.ckoglu.workers.dev/?url=${encodeURIComponent(site)}`;
     event.respondWith(
       (async () => {
         try {
