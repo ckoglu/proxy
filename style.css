@@ -22,15 +22,12 @@ a:hover{text-decoration:underline}
 .script-div {display: flex;gap:9px}
 #url-script, #direkt-script {cursor: pointer;}
 .source-script {padding: 10px;margin-top:5px;overflow-x: auto;position: relative;white-space: pre;word-break:normal;color: #000;text-transform: none;}
-.source-script::before, .source-script::after{position:absolute;font-size:11px;top:8px;background:rgba(0,0,0,.6);color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer;opacity:0;transition:opacity .2s;pointer-events:auto}
-.source-script::before{content:var(--btn-text, "url");right:75px;}
-.source-script::after{content:var(--btn-text, "direkt");right:8px;}
 .source-script:hover::before, .source-script:hover::after  {opacity: 1;}
 .source-script .keyword   { color: #c93791; } 
 .source-script .string    { color: #0020d8; } 
 .source-script .number    { color: #69ce33; } 
 .source-script .function  { color: #098b1f; } 
-.source-script .variable  { color: #ff7b00; } 
+.source-script .variable  { color: #994a00; } 
 @media (max-width:768px){
     .input-prefix{display: none;}
     h1{margin-top:20px}
