@@ -1,5 +1,3 @@
-const scriptKey = "AKfycbw_MYcInMCCYiQZNzeaZAp7Upl_UwNZS2O1rlx1bDBwBT7UFJJPEpvNSSmbkCgWXATk";
-
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js', { scope: './' }).then(() => {
     console.log("Service Worker kayıt edildi");
@@ -39,34 +37,15 @@ function updateSourceLink(val) {
   }
 }
 
-function beforeClick() {
-  document.getElementById("source-script").innerHTML =
-`<span class="keyword">(async</span> () =&gt; {
-  <span class="keyword">const</span> site = <span class="keyword">new</span> <span class="function">URLSearchParams</span>(location.search).<span class="function">get</span>(<span class="string">"site"</span>);
-  <span class="keyword">if</span> (!site) <span class="keyword">return</span>;
-  <span class="keyword">try</span> {
-    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://script.google.com/macros/s/${scriptKey}/exec?site='</span> + <span class="function">encodeURIComponent</span>(site));
-    document.body.textContent = <span class="keyword">await</span> res.<span class="function">text</span>();
-  } <span class="keyword">catch</span> (e) {
-    document.body.textContent = <span class="string">"Hata: "</span> + e.message;
-  }
-})();`;
-}
-
-function afterClick() {
+function fetchClick() {
   const input = document.getElementById("siteUrl");
   const siteValue = input && input.value.trim() ? input.value.trim() : "https://www.site.com";
 
   document.getElementById("source-script").innerHTML =
-`<span class="keyword">(async</span> () =&gt; {
-  <span class="keyword">const</span> site = <span class="string">'${siteValue}'</span>;
-  <span class="keyword">try</span> {
-    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://script.google.com/macros/s/${scriptKey}/exec?site='</span> + <span class="function">encodeURIComponent</span>(site));
-    document.body.textContent = <span class="keyword">await</span> res.<span class="function">text</span>();
-  } <span class="keyword">catch</span> (e) {
-    document.body.textContent = <span class="string">"Hata: "</span> + e.message;
-  }
-})();`;
+`<span class="function">fetch</span>(<span class="string">"https://proxy.ckoglu.workers.dev/?url=${siteValue}"</span>)
+.then(<span class="variable">res</span> =&gt; <span class="variable">res</span>.<span class="function">text</span>())
+.then(<span class="variable">data</span> =&gt; {<span class="variable">document</span>.<span class="variable">body</span>.<span class="variable">textContent</span> = <span class="variable">data</span>;})
+.catch(<span class="variable">err</span> =&gt; <span class="variable">console</span>.<span class="function">error</span>(<span class="string">"hata:"</span>, <span class="variable">err</span>));`;
 }
 
 document.getElementById('proxyForm').addEventListener('submit', e => {
@@ -77,38 +56,16 @@ document.getElementById('proxyForm').addEventListener('submit', e => {
   window.open(proxyUrl, '_blank');
 });
 
-const el = document.querySelector('.source-script');
-el.addEventListener('click', e => {
-  const rect = el.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const clickY = e.clientY - rect.top;
-
-  const beforeRightEdge = rect.width - 75;
-  const beforeLeftEdge = beforeRightEdge - 70;
-  const topEdge = 0;
-  const bottomEdge = 30;
-
-  const afterRightEdge = rect.width - 8;
-  const afterLeftEdge = afterRightEdge - 60;
-
-  if (clickY >= topEdge && clickY <= bottomEdge) {
-    if (clickX >= beforeLeftEdge && clickX <= beforeRightEdge) {
-      beforeClick();
-      return;
-    }
-    if (clickX >= afterLeftEdge && clickX <= afterRightEdge) {
-      afterClick();
-      return;
-    }
-  }
-});
-
 const siteInput = document.getElementById("siteUrl");
 siteInput.addEventListener("input", () => {
   updateSourceLink(siteInput.value.trim());
-  const sourceScriptContent = document.getElementById('source-script').textContent;
-  if (!sourceScriptContent.includes("URLSearchParams")) {
-    document.querySelector('#source-script .string').textContent = siteInput.value.trim();
+  const sourceScript = document.getElementById('source-script');
+  const stringEl = sourceScript.querySelector('.string');
+  let currentUrl = stringEl.textContent;
+  if (currentUrl.includes("?site=")) {
+    const beforePart = currentUrl.split("?site=")[0]; // ?site= öncesi
+    stringEl.textContent = beforePart + "?site=" + siteInput.value.trim() + '"';
+    if (siteInput.value.trim() === "") {stringEl.textContent = beforePart + '?site=https://www.site.com"';}
   }
 });
 
@@ -128,7 +85,7 @@ window.addEventListener("load", async () => {
 
   const params = new URLSearchParams(location.search);
   const site = params.get("site");
-  beforeClick();
+  fetchClick();
 
   if (site) {
     try {
