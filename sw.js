@@ -2,8 +2,8 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   const pathname = location.pathname.split('/').filter(Boolean);
   const repo = pathname.length > 0 ? `/${pathname[0]}/` : '/';
-  if (url.pathname === repo && url.searchParams.has("site")) {
-    const site = url.searchParams.get("site");
+  if (url.pathname === repo && url.searchParams.has("url")) {
+    const site = url.searchParams.get("url");
     const proxyURL = `https://proxy.ckoglu.workers.dev/?url=${encodeURIComponent(site)}`;
     event.respondWith(
       (async () => {
