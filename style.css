@@ -31,5 +31,5 @@ a:hover{text-decoration:underline}
 @media (max-width:768px){
     .input-prefix{display: none;}
     h1{margin-top:20px}
-    code,pre{white-space:pre-wrap;word-wrap:break-word;}
+    .source-script,code,pre{white-space:pre-wrap;word-wrap:break-word;}
 }
