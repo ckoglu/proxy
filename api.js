@@ -29,10 +29,10 @@ async function fetchWithRetry(url, retries = 1) {
 function updateSourceLink(val) {
   const sourceLink = document.getElementById("source-link");
   if (val) {
-    sourceLink.textContent = `${location.origin}${location.pathname}?site=${encodeURIComponent(val)}`;
+    sourceLink.textContent = `${location.origin}${location.pathname}?url=${encodeURIComponent(val)}`;
     sourceLink.href = sourceLink.textContent;
   } else {
-    sourceLink.textContent = `${location.origin}${location.pathname}?site=<url_to_http_resource>`;
+    sourceLink.textContent = `${location.origin}${location.pathname}?url=<url_to_http_resource>`;
     sourceLink.href = "#";
   }
 }
@@ -40,7 +40,6 @@ function updateSourceLink(val) {
 function fetchClick() {
   const input = document.getElementById("siteUrl");
   const siteValue = input && input.value.trim() ? input.value.trim() : "https://www.site.com";
-
   document.getElementById("source-script").innerHTML =
 `<span class="function">fetch</span>(<span class="string">"https://proxy.ckoglu.workers.dev/?url=${siteValue}"</span>)
 .then(<span class="variable">res</span> =&gt; <span class="variable">res</span>.<span class="function">text</span>())
@@ -52,7 +51,7 @@ document.getElementById('proxyForm').addEventListener('submit', e => {
   e.preventDefault();
   const siteUrl = document.getElementById('siteUrl').value.trim();
   if (!siteUrl) return alert('Lütfen geçerli bir URL girin');
-  const proxyUrl = window.location.pathname + '?site=' + encodeURIComponent(siteUrl);
+  const proxyUrl = window.location.pathname + '?url=' + encodeURIComponent(siteUrl);
   window.open(proxyUrl, '_blank');
 });
 
@@ -62,10 +61,10 @@ siteInput.addEventListener("input", () => {
   const sourceScript = document.getElementById('source-script');
   const stringEl = sourceScript.querySelector('.string');
   let currentUrl = stringEl.textContent;
-  if (currentUrl.includes("?site=")) {
-    const beforePart = currentUrl.split("?site=")[0]; // ?site= öncesi
-    stringEl.textContent = beforePart + "?site=" + siteInput.value.trim() + '"';
-    if (siteInput.value.trim() === "") {stringEl.textContent = beforePart + '?site=https://www.site.com"';}
+  if (currentUrl.includes("?url=")) {
+    const beforePart = currentUrl.split("?url=")[0]; // ?url= öncesi
+    stringEl.textContent = beforePart + "?url=" + siteInput.value.trim() + '"';
+    if (siteInput.value.trim() === "") {stringEl.textContent = beforePart + '?url=https://www.site.com"';}
   }
 });
 
@@ -80,7 +79,7 @@ window.addEventListener("load", async () => {
   }
   history.replaceState({}, "", newUrl);
 
-  document.getElementById('prefix').textContent = `${location.origin}${location.pathname}?site=`;
+  document.getElementById('prefix').textContent = `${location.origin}${location.pathname}?url=`;
   updateSourceLink('');
 
   const params = new URLSearchParams(location.search);
@@ -89,7 +88,7 @@ window.addEventListener("load", async () => {
 
   if (site) {
     try {
-      const url = `${location.origin}${location.pathname}?site=${encodeURIComponent(site)}`;
+      const url = `${location.origin}${location.pathname}?url=${encodeURIComponent(site)}`;
       const json = await fetchWithRetry(url, 1);
       document.body.textContent = JSON.stringify(json, null, 2);
     } catch (e) {
