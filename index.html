@@ -7,33 +7,35 @@
     <meta name="description" content="cors kısıtlamalarını aşan proxy aracı">
     <meta name="keywords" content="proxy, api, cors, engel, html, kaynak, json">
     <meta name="author" content="ckoglu">
-    <link rel="icon" href="https://avatars.githubusercontent.com/u/75999325">
-    <meta name="theme-color" content="#0369a1" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/3/3a/Tabler-icons_html.svg">
+    <meta name="theme-color" content="#58437e" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
     <link rel="preload" href="style.css" as="style">
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <header>
+      <a href="./"><h1>&lt;CORS Proxy API&gt;</h1></a>
+      <p>Tarayıcı kısıtlamalarını aşın</p>
+    </header>
     <div class="container">
-      <h1><a href="/proxy">&lt;CORS Proxy API&gt;</a></h1>
-      <form id="proxyForm">
-        <div class="input-group">
-            <span id="prefix" class="input-prefix"></span>
-            <input type="text" id="siteUrl" placeholder="https://www.site.com/" required>
-        </div>
-        <button type="submit">get</button>
+      <form id="proxyForm" class="card">
+        <input type="text" id="siteUrl" placeholder="https://www.site.com/" required>
+        <button type="submit" class="rbtn">get</button>
       </form>
-      <p><strong>view-source:</strong><a target="_blank" id="source-link"></a></p>
-      <br>
-      <div class="script-div"><strong>fetch veri</strong>=&gt;</div>
-      <code id="source-script" class="source-script"></code>
-      <br>
-      <h2>CORS Nedir?</h2>
-      <p><strong>CORS (Cross-Origin Resource Sharing)</strong>, web tarayıcıları tarafından uygulanan bir güvenlik protokolüdür. Bir web sayfasının, farklı bir kaynakta (alan adı, protokol veya port) bulunan kaynaklara (API'lere) HTTP istekleri göndermesini kısıtlar.</p>
-      <h2>Nasıl Çalışır?</h2>
-      <p><strong>tarayıcı -&gt; &lt;sunucu/proxy&gt; -&gt; &lt;api&gt;</strong><br>Tarayıcı ile hedef API arasında aracı görevi görür. Tarayıcı kısıtlamaları sadece web sayfaları için geçerlidir. Proxy bir sunucu tarafı uygulama olduğu için bu kısıtlamalara tabi değildir.</p>
+      <div class="card">
+        <h2>JS Fetch</h2>
+        <pre><code id="source-script" class="source-script"></code></pre>
+        <strong>view-source: </strong><a target="_blank" id="source-link"></a>
+      </div>
+      <div class="card">
+        <h2>CORS Nedir?</h2>
+        <p><strong>CORS (Cross-Origin Resource Sharing)</strong>, web tarayıcıları tarafından uygulanan bir güvenlik protokolüdür. Bir web sayfasının, farklı bir kaynakta (alan adı, protokol veya port) bulunan kaynaklara (API'lere) HTTP istekleri göndermesini kısıtlar.</p>
+        <h2>Nasıl Çalışır?</h2>
+        <pre>tarayıcı ==&gt; &lt;sunucu/proxy&gt; ==&gt; &lt;api&gt;</pre>
+        <p>Tarayıcı ile hedef API arasında aracı görevi görür. Tarayıcı kısıtlamaları sadece web sayfaları için geçerlidir. Proxy bir sunucu tarafı uygulama olduğu için bu kısıtlamalara tabi değildir.</p>
+      </div>
     </div>
-
     <footer class="footer">
       <span>CORS Proxy API <span id="currentYear">2025</span> | <a href="https://github.com/ckoglu" target="_blank">github.com/ckoglu</a></span>
     </footer>
