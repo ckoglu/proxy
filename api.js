@@ -1,11 +1,3 @@
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: './' }).then(() => {
-    console.log("Service Worker kayıt edildi");
-  }).catch(err => {
-    console.error("Service Worker kayıt hatası:", err);
-  });
-}
-
 async function fetchWithRetry(url, retries = 1) {
   try {
     const res = await fetch(url);
@@ -29,10 +21,10 @@ async function fetchWithRetry(url, retries = 1) {
 function updateSourceLink(val) {
   const sourceLink = document.getElementById("source-link");
   if (val) {
-    sourceLink.textContent = `${location.origin}${location.pathname}?url=${encodeURIComponent(val)}`;
+    sourceLink.textContent = `https://proxy.ckoglu.workers.dev/?url=${encodeURIComponent(val)}`;
     sourceLink.href = sourceLink.textContent;
   } else {
-    sourceLink.textContent = `${location.origin}${location.pathname}?url=<url_to_http_resource>`;
+    sourceLink.textContent = `https://proxy.ckoglu.workers.dev/?url=<url_to_http_resource>`;
     sourceLink.href = "#";
   }
 }
@@ -51,7 +43,7 @@ document.getElementById('proxyForm').addEventListener('submit', e => {
   e.preventDefault();
   const siteUrl = document.getElementById('siteUrl').value.trim();
   if (!siteUrl) return alert('Lütfen geçerli bir URL girin');
-  const proxyUrl = window.location.pathname + '?url=' + encodeURIComponent(siteUrl);
+  const proxyUrl = 'https://proxy.ckoglu.workers.dev/?url=' + encodeURIComponent(siteUrl);
   window.open(proxyUrl, '_blank');
 });
 
@@ -79,16 +71,15 @@ window.addEventListener("load", async () => {
   }
   history.replaceState({}, "", newUrl);
 
-  document.getElementById('prefix').textContent = `${location.origin}${location.pathname}?url=`;
   updateSourceLink('');
 
   const params = new URLSearchParams(location.search);
-  const site = params.get("site");
+  const site = params.get("url");
   fetchClick();
 
   if (site) {
     try {
-      const url = `${location.origin}${location.pathname}?url=${encodeURIComponent(site)}`;
+      const url = `https://proxy.ckoglu.workers.dev/?url=${encodeURIComponent(site)}`;
       const json = await fetchWithRetry(url, 1);
       document.body.textContent = JSON.stringify(json, null, 2);
     } catch (e) {
